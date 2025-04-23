@@ -1,27 +1,31 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: linear-gradient(135deg, #2D1B4D 0%, #1A472A 100%);
+  --foreground: #ffffff;
+  --primary: #9D4EDD;
+  --primary-hover: #7B2CBF;
+  --secondary: #4CAF50;
+  --secondary-hover: #388E3C;
+  --accent: #e2ca45e8;
+  --text-primary: #ffffff;
+  --text-secondary: #E0E0E0;
 }
 
 html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  color: var(--foreground);
+  color: var(--text-primary);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  background-attachment: fixed;
+  line-height: 1.5;
 }
 
 * {
@@ -31,8 +35,39 @@ body {
 }
 
 a {
-  color: inherit;
+  color: var(--primary);
   text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+}
+
+/* Prevent text from being too small on mobile */
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
 }
 
 @media (prefers-color-scheme: dark) {

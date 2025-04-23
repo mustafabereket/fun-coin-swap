@@ -1,10 +1,8 @@
-// app/page.jsx (Server Component)
 import HomeClient from "./components/HomeClient/HomeClient";
 import { getAssetErc20ByChainAndSymbol } from "@funkit/api-base";
 import "./page.module.css";
 import { ChainIds, TokenData } from "./types";
 
-// List of symbols and their chains
 const CHAIN_IDS: ChainIds = {
   USDC: "1",
   USDT: "137",
@@ -12,7 +10,7 @@ const CHAIN_IDS: ChainIds = {
   WBTC: "1",
   POLY: "137",
 };
-
+// This main page is SSR rendered, I am fetching all the addresses and making everything ready beforehand.
 export default async function Page() {
   const apiKey = process.env.NEXT_PUBLIC_FUNKIT_API_KEY;
   if (!apiKey) {
@@ -29,7 +27,6 @@ export default async function Page() {
     )
   );
 
-  // Build a lookup map: { USDC: { address, chainId }, ... }
   const initialTokens: TokenData = tokenInfos.reduce((map, info) => {
     map[info.symbol] = {
       address: info.address,
@@ -40,6 +37,5 @@ export default async function Page() {
 
   console.log(initialTokens);
 
-  // Pass preloaded data into the client
   return <HomeClient initialTokens={initialTokens} />;
 }

@@ -56,8 +56,7 @@ export default function HomeClient({ initialTokens }: HomeClientProps) {
   );
 
   const destAmount = useMemo(
-    () =>
-      amount > 0 && destData?.data ? amount / destData.data.unitPrice : 0,
+    () => (amount > 0 && destData?.data ? amount / destData.data.unitPrice : 0),
     [amount, destData.data]
   );
 
@@ -66,49 +65,74 @@ export default function HomeClient({ initialTokens }: HomeClientProps) {
       <div className={styles.tokenList}>
         <h2>Selected Source Token: {sourceToken}</h2>
         {Object.keys(initialTokens).map((token) => (
-          <button
+          <div
             key={token}
+            className={`${styles.token} ${
+              sourceToken === token ? styles.active : ""
+            }`}
             onClick={() => setSourceToken(token)}
             aria-pressed={sourceToken === token}
           >
             {token}
-          </button>
+          </div>
         ))}
       </div>
 
-      <div>
-        <h2>
-          {sourceData.isLoading
-            ? "Loading..."
-            : `$${amount} USD is ${sourceAmount.toFixed(6)} ${sourceToken}`}
-        </h2>
-        {sourceData.error && <p>Error loading price</p>}
-
+      <div className={styles.resultPanel}>
+        <h2>Amount: ${amount}</h2>
         <input
           type="number"
           value={inputAmount}
-          onChange={(e) => setInputAmount(e.target.value)}
+          onChange={(e) => {
+            const val = e.target.value;
+            // limiting numbers here to 9999999
+            if (val === "" || Number(val) <= 9999999) {
+              setInputAmount(val);
+            }
+          }}
           placeholder="Enter USD amount"
           aria-label="USD Amount"
+          className={styles.amountInput}
         />
-        <h2>Amount: ${amount}</h2>
 
-        <h2>
-          Destination Amount:{" "}
-          {destData.isLoading ? "Loading..." : destAmount.toFixed(6)}
-        </h2>
+        <div className={`${styles.token} ${styles.active}`}>
+          {" "}
+          {sourceData.isLoading ? (
+            "Loading..."
+          ) : (
+            <span>
+              {sourceAmount.toFixed(4)} {sourceToken}
+            </span>
+          )}
+        </div>
+        {sourceData.error && <p>Error loading price</p>}
+
+        <div className={`${styles.token} ${styles.active}`}>
+          {" "}
+          {destData.isLoading ? (
+            "Loading..."
+          ) : (
+            <span>
+              {destAmount.toFixed(4)} {destToken}
+            </span>
+          )}
+        </div>
+        {sourceData.error && <p>Error loading price</p>}
       </div>
 
       <div className={styles.tokenList}>
         <h2>Selected Destination Token: {destToken}</h2>
         {Object.keys(initialTokens).map((token) => (
-          <button
+          <div
             key={token}
             onClick={() => setDestToken(token)}
             aria-pressed={destToken === token}
+            className={`${styles.token} ${
+              destToken === token ? styles.active : ""
+            }`}
           >
             {token}
-          </button>
+          </div>
         ))}
 
         {destData.error && <p>Error loading price</p>}
