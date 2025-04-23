@@ -83,7 +83,7 @@ NEXT_PUBLIC_FUNKIT_API_KEY=your_api_key_here
 - USDT (Polygon)
 - ETH (Base)
 - WBTC (Ethereum)
-- POLY (Polygon)
+- POLY (Polymath)
 
 ## Development
 
