@@ -1,4 +1,4 @@
-# Token Price Converter
+# FUN COIN SWAP (Token Price Converter)
 
 A Next.js application that allows users to convert between different cryptocurrency tokens using real-time price data. This project demonstrates the integration with the FunKit API to fetch token prices and perform conversions.
 
