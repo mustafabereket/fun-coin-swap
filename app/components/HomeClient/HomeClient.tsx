@@ -4,8 +4,13 @@ import styles from "./HomeClient.module.css";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useQuery } from "@tanstack/react-query";
 import { getAssetPriceInfo } from "@funkit/api-base";
+import { HomeClientProps } from "../../types";
 
-export default function HomeClient({ initialTokens }) {
+interface AssetPriceInfo {
+  unitPrice: number;
+}
+
+export default function HomeClient({ initialTokens }: HomeClientProps) {
   const [inputAmount, setInputAmount] = useState("");
   const debouncedAmount = useDebounce(inputAmount, 200);
   const amount = useMemo(() => {
@@ -16,43 +21,43 @@ export default function HomeClient({ initialTokens }) {
   const [sourceToken, setSourceToken] = useState("");
   const [destToken, setDestToken] = useState("");
 
-  const sourceData = useQuery({
+  const sourceData = useQuery<AssetPriceInfo>({
     queryKey: ["price", sourceToken],
     queryFn: () =>
       getAssetPriceInfo({
         chainId: initialTokens[sourceToken].chainId,
         assetTokenAddress: initialTokens[sourceToken].address,
-        apiKey: process.env.NEXT_PUBLIC_FUNKIT_API_KEY,
+        apiKey: process.env.NEXT_PUBLIC_FUNKIT_API_KEY || "",
       }),
     enabled: !!sourceToken,
     staleTime: 0,
-    cacheTime: 0,
+    gcTime: 0,
     refetchInterval: 3000,
   });
 
-  const destData = useQuery({
+  const destData = useQuery<AssetPriceInfo>({
     queryKey: ["price", destToken],
     queryFn: () =>
       getAssetPriceInfo({
         chainId: initialTokens[destToken].chainId,
         assetTokenAddress: initialTokens[destToken].address,
-        apiKey: process.env.NEXT_PUBLIC_FUNKIT_API_KEY,
+        apiKey: process.env.NEXT_PUBLIC_FUNKIT_API_KEY || "",
       }),
     enabled: !!destToken,
     staleTime: 0,
-    cacheTime: 0,
+    gcTime: 0,
     refetchInterval: 3000,
   });
 
   const sourceAmount = useMemo(
     () =>
-      amount > 0 && sourceData?.data ? amount / sourceData?.data?.unitPrice : 0,
+      amount > 0 && sourceData?.data ? amount / sourceData.data.unitPrice : 0,
     [amount, sourceData.data]
   );
 
   const destAmount = useMemo(
     () =>
-      amount > 0 && destData?.data ? amount / destData?.data?.unitPrice : 0,
+      amount > 0 && destData?.data ? amount / destData.data.unitPrice : 0,
     [amount, destData.data]
   );
 
